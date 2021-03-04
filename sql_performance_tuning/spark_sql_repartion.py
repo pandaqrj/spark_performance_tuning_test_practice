@@ -12,12 +12,12 @@ def exe_spark():
 
     # 重分区和合并
     """
-        SELECT /*+ COALESCE(3) */ * FROM t
-        SELECT /*+ REPARTITION(3) */ * FROM t
-        SELECT /*+ REPARTITION(c1) */ * FROM t
-        SELECT /*+ REPARTITION(3, c1) */ * FROM t
-        SELECT /*+ REPARTITION_BY_RANGE(c1) */ * FROM t
-        SELECT /*+ REPARTITION_BY_RANGE(3, c1) */ * FROM t
+    SELECT /*+ COALESCE(3) */ * FROM t;
+    SELECT /*+ REPARTITION(3) */ * FROM t;
+    SELECT /*+ REPARTITION(c1) */ * FROM t;
+    SELECT /*+ REPARTITION(3, c1) */ * FROM t;
+    SELECT /*+ REPARTITION_BY_RANGE(c1) */ * FROM t;
+    SELECT /*+ REPARTITION_BY_RANGE(3, c1) */ * FROM t;
     """
 
     # 重分区，不会shuffle, 是将同一个节点上的多个分区进行重分区
