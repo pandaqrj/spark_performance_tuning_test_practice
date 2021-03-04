@@ -29,6 +29,17 @@ def exe_spark():
     """
     df.persist(storageLevel=StorageLevel.MEMORY_AND_DISK).createOrReplaceTempView("t")
 
+    '''
+    # 也可以通过SQL方式缓存
+    # `CACHE LAZY TABLE`会直到一个action操作才被触发，而`CACHE TABLE`会即时生效
+    # persist()也是lazy的
+    spark.sql(
+        """
+            CACHE LAZY TABLE t
+        """
+    )
+    '''
+
     # 计算1
     spark.sql(
         """
