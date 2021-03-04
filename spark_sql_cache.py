@@ -30,18 +30,20 @@ def exe_spark():
     df.persist(storageLevel=StorageLevel.MEMORY_AND_DISK).createOrReplaceTempView("t")
 
     # 计算1
-    spark.sql("""
-        SELECT count(1) as count
-          FROM t
-         WHERE id <= 5
-    """).show()
+    spark.sql(
+        """
+            SELECT count(1) as count
+              FROM t
+             WHERE id <= 5
+        """).show()
 
     # 计算2 复用了view t
-    spark.sql("""
-        SELECT count(1) as count
-          FROM t
-         WHERE id >= 6
-    """).show()
+    spark.sql(
+        """
+            SELECT count(1) as count
+              FROM t
+             WHERE id >= 6
+        """).show()
 
 
 if __name__ == "__main__":
