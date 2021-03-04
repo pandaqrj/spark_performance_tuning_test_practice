@@ -9,7 +9,7 @@ def exe_spark():
         .getOrCreate()
     # sc = spark.sparkContext
 
-    spark.read.json("data.json").createOrReplaceTempView("t")
+    spark.read.json("../data1.json").createOrReplaceTempView("t")
 
     # 临时数据存储
     # 如果计算会重用某个数据集，应该缓存，否则 spark 每次计算将会从源头开始
@@ -27,7 +27,7 @@ def exe_spark():
     #     OFF_HEAP
     spark.sql(
         """
-            CACHE LAZY TABLE t OPTIONS ('storageLevel' 'DISK_ONLY')
+            CACHE LAZY TABLE t OPTIONS ('storageLevel' 'MEMORY_ONLY')
         """
     )
 

@@ -8,7 +8,7 @@ def exe_spark():
         .getOrCreate()
     # sc = spark.sparkContext
 
-    spark.read.json("data.json").createOrReplaceTempView("t")
+    spark.read.json("../data1.json").createOrReplaceTempView("t")
 
     # 重分区和合并
     """

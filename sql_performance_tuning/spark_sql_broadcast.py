@@ -9,10 +9,10 @@ def exe_spark():
         .getOrCreate()
     # sc = spark.sparkContext
 
-    spark.read.json("data.json").createOrReplaceTempView("t")
+    spark.read.json("../data1.json").createOrReplaceTempView("t")
 
     """
-    -- 广播关联Hints:
+    -- Join Hints for broadcast join
     SELECT /*+ BROADCAST(t1) */ * FROM t1 INNER JOIN t2 ON t1.key = t2.key;
     SELECT /*+ BROADCASTJOIN (t1) */ * FROM t1 left JOIN t2 ON t1.key = t2.key;
     SELECT /*+ MAPJOIN(t2) */ * FROM t1 right JOIN t2 ON t1.key = t2.key;
@@ -28,12 +28,10 @@ def exe_spark():
     -- Join Hints for shuffle-and-replicate nested loop join
     SELECT /*+ SHUFFLE_REPLICATE_NL(t1) */ * FROM t1 INNER JOIN t2 ON t1.key = t2.key;
     
-    -- When different join strategy hints are specified on both sides of a join, Spark
-    -- prioritizes the BROADCAST hint over the MERGE hint over the SHUFFLE_HASH hint
-    -- over the SHUFFLE_REPLICATE_NL hint.
-    -- Spark will issue Warning in the following example
-    -- org.apache.spark.sql.catalyst.analysis.HintErrorLogger: Hint (strategy=merge)
-    -- is overridden by another hint and will not take effect.
+    -- 多个hints同时指定时，有以下优先级：
+    -- BROADCAST > MERGE > SHUFFLE_HASH > SHUFFLE_REPLICATE_NL
+    -- 下面的例子会Warning：org.apache.spark.sql.catalyst.analysis.HintErrorLogger: Hint (strategy=merge)
+    -- MERGE会被覆盖，不会生效
     SELECT /*+ BROADCAST(t1), MERGE(t1, t2) */ * FROM t1 INNER JOIN t2 ON t1.key = t2.key;
     """
 
