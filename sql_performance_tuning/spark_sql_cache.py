@@ -11,9 +11,9 @@ def exe_spark():
 
     df = spark.read.json("data.json")
 
-    # 临时数据存储
-    # 如果计算会重用某个数据集，应该缓存，否则 spark 每次计算将会从源头开始
     """
+    临时数据存储
+    如果计算会重用某个数据集，应该缓存，否则 spark 每次计算将会从源头开始
     临时数据的存储级别：
         MEMORY_ONLY
         MEMORY_ONLY_2

@@ -25,7 +25,9 @@ def exe_spark():
     # 但是在数据量较大的情况下会降低计算速度
     spark.sql(
         """
-            SELECT /*+ COALESCE(3) */ * FROM t
+            SELECT /*+ COALESCE(3) */ 
+                   * 
+              FROM t
         """
     ).show()
 
@@ -34,7 +36,9 @@ def exe_spark():
     # 但是要注意shuffle的开销
     spark.sql(
         """
-            SELECT /*+ REPARTITION(3) */ * FROM t
+            SELECT /*+ REPARTITION(3) */ 
+                   * 
+              FROM t
         """
     ).show()
 
