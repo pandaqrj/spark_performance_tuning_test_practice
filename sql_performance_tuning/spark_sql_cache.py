@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 def exe_spark():
     spark = SparkSession.builder \
         .master("local[*]") \
-        .appName("spark sql hint test") \
+        .appName("spark sql cache test") \
         .getOrCreate()
     # sc = spark.sparkContext
 
@@ -33,18 +33,14 @@ def exe_spark():
     # 计算1
     spark.sql(
         """
-            SELECT count(1) as count
-              FROM t
-             WHERE id <= 5
+            SELECT count(1) as count FROM t WHERE id <= 5
         """
     ).show()
 
     # 计算2 复用了view t
     spark.sql(
         """
-            SELECT count(1) as count
-              FROM t
-             WHERE id >= 6
+            SELECT count(1) as count FROM t WHERE id >= 6
         """
     ).show()
 
