@@ -1,5 +1,4 @@
 from pyspark.sql import SparkSession
-from pyspark.storagelevel import StorageLevel
 
 
 def exe_spark():
