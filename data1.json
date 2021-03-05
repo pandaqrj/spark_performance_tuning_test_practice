@@ -1,12 +1,12 @@
-{"id": 1, "c1": "a"}
-{"id": 2, "c1": "b"}
-{"id": 3, "c1": "c"}
-{"id": 4, "c1": "d"}
-{"id": 5, "c1": "e"}
-{"id": 6, "c1": "f"}
-{"id": 7, "c1": "g"}
-{"id": 8, "c1": "h"}
-{"id": 9, "c1": "i"}
-{"id": 10, "c1": "j"}
-{"id": 11, "c1": "k"}
-{"id": 12, "c1": "l"}
+{"id": 1, "user": "张三", "good": "手机", "amount": 5000}
+{"id": 2, "user": "李四", "good": "书", "amount": 50}
+{"id": 3, "user": "王五", "good": "杯子", "amount": 15}
+{"id": 4, "user": "张三", "good": "键盘", "amount": 300}
+{"id": 5, "user": "张三", "good": "书", "amount": 50}
+{"id": 6, "user": "王五", "good": "鼠标", "amount": 150}
+{"id": 7, "user": "王五", "good": "键盘", "amount": 300}
+{"id": 8, "user": "李四", "good": "书", "amount": 6000}
+{"id": 9, "user": "王五", "good": "耳机", "amount": 8000}
+{"id": 10, "user": "张三", "good": "台灯", "amount": 150}
+{"id": 11, "user": "张三", "good": "手机", "amount": 5000}
+{"id": 12, "user": "李四", "good": "杯子", "amount": 15}
