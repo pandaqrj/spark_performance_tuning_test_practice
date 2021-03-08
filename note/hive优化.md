@@ -161,12 +161,12 @@ Hive只会用一个Reducer来计算笛卡尔积
     SELECT COUNT(*) AS ROW_NUM FROM T1
     ```
 + ### 小文件的合并
-    1. 在MAP执行前合并小文件，减少MAP数
+    + 在MAP执行前合并小文件，减少MAP数
         ```sql
         -- 默认
         SET hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
         ```
-    2. MR任务结束时合并小文件
+    + MR任务结束时合并小文件
         ```sql
         -- MAP-ONLY任务结束时合并小文件，默认true
         SET hive.merge.mapfiles=true;
@@ -177,5 +177,9 @@ Hive只会用一个Reducer来计算笛卡尔积
         -- 合并文件的大小，默认256MB
         SET hive.merge.size.per.task=268435456;
        
-        --
+        -- 当输出文件平均值小于此值，则启动一个MR任务进行合并
+        SET hive.merge.smallfiles.avgsize=16777216;
         ```
++ ### 合理设置Reduce数
+    + 调整
+    
