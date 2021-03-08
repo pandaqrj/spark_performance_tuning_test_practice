@@ -9,3 +9,35 @@ RDD是Spark用于数据处理的核心模型
 4. Driver将任务根据计算节点的状态（数据或者其他）发动到对应的节点的Executor进行计算  
 
 因此RDD在整个流程中主要用于将逻辑进行封装，并生成Task发动给Executor执行计算。
+
+
+```python
+from pyspark.sql import SparkSession
+
+
+def exe_spark():
+    spark = SparkSession.builder \
+        .master("local[*]") \
+        .appName("sql test1") \
+        .getOrCreate()
+
+    spark.read.parquet("spark-warehouse/order_detail").createOrReplaceTempView("oder_detail")
+
+    SQL = """
+        SELECT T1.province AS AREA
+              ,SUBSTR(T1.date, 0, 7) AS MON
+              ,COUNT(1) AS ORDER_COUNT
+              ,SUM(T1.amount) AS ORDER_AMOUNT
+          FROM oder_detail T1
+         WHERE SUBSTR(T1.date, 0, 7) = '2021-01'
+      GROUP BY T1.province
+              ,SUBSTR(T1.date, 0, 7)
+    """
+    spark.sql(SQL).show(truncate=False)
+
+
+if __name__ == '__main__':
+    exe_spark()
+
+
+```
