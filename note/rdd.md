@@ -7,4 +7,5 @@ RDD是Spark用于数据处理的核心模型
 2. Spark申请资源创建Driver、Executor
 3. Spark根据需求将计算逻辑分局分区划分成不同的任务，有Driver执行，生产TaskPool
 4. Driver将任务根据计算节点的状态（数据或者其他）发动到对应的节点的Executor进行计算  
+
 因此RDD在整个流程中主要用于将逻辑进行封装，并生成Task发动给Executor执行计算。
