@@ -142,16 +142,16 @@ Hive只会用一个Reducer来计算笛卡尔积
 
 ## 分桶
 
-## 合理设置任务数
-1. 通常认为一个任务处理一个集群Block大小的数据（默认为128M）最合适。
-2. 作业数越多越好？  
-   如果一个任务处理很多小文件，但是这些小文件都远小于一个Block大小，
-   则每个小文件都会被当做一个Block用一个任务来处理，当任务数多起来的时候，
-   每一个任务启动和初始化的时间则会远远大于逻辑计算的时间，就会造成资源浪费。
-   而且同一时间可执行的任务数是有限的。
-3. 每个任务处理一个Block大小就高枕无忧了？  
+## 合理设置作业数
+1. 通常认为一个MAP作业处理一个集群Block大小的数据（默认为128M）最合适。
+2. MAP作业数越多越好？  
+   如果一个作业处理很多小文件，但是这些小文件都远小于一个Block大小，
+   则每个小文件都会被当做一个Block用一个作业来处理，当作业数多起来的时候，
+   每一个作业启动和初始化的时间则会远远大于逻辑计算的时间，就会造成资源浪费。
+   而且同一时间可执行的作业数是有限的。
+3. 每个MAP作业处理一个Block大小就高枕无忧了？  
    不一定，因为如果一行数据的大小是1B，那么128MB就有一亿多行的数据！
-   这时候就需要对任务处理的文件大小进行缩小。
+   这时候就需要对作业处理的文件大小设置进行缩小。
    
 + ### 复杂文件增加Map数
     增加 map 的方法为：根据`computeSliteSize(Math.max(minSize,Math.min(maxSize,blocksize)))=blocksize=128M`公式，调整 maxSize 最大值。让 maxSize 最大值低于 blocksize 就可以增加 map 的个数。
@@ -181,5 +181,33 @@ Hive只会用一个Reducer来计算笛卡尔积
         SET hive.merge.smallfiles.avgsize=16777216;
         ```
 + ### 合理设置Reduce数
-    + 调整
+    + #### 调整reduce数量
+        + 修改hive配置
+            ```sql
+            -- 每个reduce处理数据的大小，默认256MB
+            SET hive.reducers.bytes.per.reducer=256000000;
+            
+            --每个任务最大reduce数，默认1009
+            SET hive.exec.reducers.max=1009;
+            ``` 
+            计算recuder数的公式：
+        `min(hive.exec.reducers.max, {总数据量}/hive.reducers.bytes.per.reducer)`  
+      
+        + 在`mapred-default.xml`文件中修改：`SET mapred.join.reduces=15;`（默认为-1）
     
+        + 只有`mapred.join.reduces=-1`时修改hive的配置才能生效，否则将以`mapred-default.xml`文件中写死的个数为准。
+    + #### reduce个数越多越好？
+        + 过多的启动和初始化reduce也会消耗时间和资源。
+        + 有多少reduce就会输出文件。
+
+    在设置reduce个数需考虑两个原则：
+    1. 处理数据量大的reduce数量要合适。
+    2. 单个reduce处理的数据量大小要合适。
+    
+## 并行执行
+在共享集群中设置并发执行可以提高运行速度。
+```sql
+SET hive.exec.parallel=true; -- 打开任务并行执行
+SET hive.exec.parallel.thread.number=16; -- 同一个 sql 允许最大并行度，默认为 8。
+```
+当然，得是在系统资源比较空闲的时候才有优势，否则，没资源，并行也起不来。
