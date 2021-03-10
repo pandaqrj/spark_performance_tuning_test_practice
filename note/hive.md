@@ -44,6 +44,7 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
     `EXPLAIN EXTENDED {SQL}`
 
 + ## 小表关联大表 - `MAPJOIN`
+    如果关联的一张表较小，则可以广播小表，让每个map中都有完整的小表数据，这样就不用进行shuflle就能完整的关联了。  
     设置参数：  
     ```sql
     SET hive.auto.convert.join=true; --默认true
@@ -52,10 +53,10 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
     这样就会自动优化，不需要在使用hint指定MAP JOIN
     ```sql
         SELECT /*+ MAPJOIN(T1) */ --最新版本的HIVE自动会选择MAP JOIN的表，不再需要hint指定
-            T1.ID
-            ,T2.NAME
-        FROM T1
-    LEFT JOIN T2
+               T1.ID
+              ,T2.NAME
+          FROM T1
+     LEFT JOIN T2
             ON T1.ID = T2.ID
     ```
 
@@ -111,9 +112,9 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
         
         EXPLAIN EXTENDED
             SELECT t1.*
-            FROM t1
-        LEFT JOIN t2
-                on t1.col_1 = t2.col_1
+              FROM t1
+         LEFT JOIN t2
+                ON t1.col_1 = t2.col_1
             ;
         ```
         
@@ -160,18 +161,18 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
         ```sql
         -- 先关联再过滤
             SELECT T1.ID
-                ,T2.NAME 
-            FROM T1 
-        LEFT JOIN T2 
+                  ,T2.NAME 
+              FROM T1 
+         LEFT JOIN T2 
                 ON T1.ID = T2.ID 
-            WHERE T1.ETL_DATE = DATE'2020-01-01'
+             WHERE T1.ETL_DATE = DATE'2020-01-01'
         ;
         
         -- 先过滤再关联
             SELECT T1.ID
-                ,T2.NAME 
-            FROM (SELECT T1.ID FROM T1 WHERE T1.ETL_DATE = DATE'2020-01-01') T1 
-        LEFT JOIN T2
+                  ,T2.NAME 
+              FROM (SELECT T1.ID FROM T1 WHERE T1.ETL_DATE = DATE'2020-01-01') T1 
+         LEFT JOIN T2
                 ON T1.ID = T2.ID
         ;
         ```
