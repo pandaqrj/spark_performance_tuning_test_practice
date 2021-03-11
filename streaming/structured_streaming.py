@@ -2,15 +2,15 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, explode
 from pyspark.sql.types import StructType, StringType, IntegerType, StructField, ArrayType
 
-url_ol = "jdbc:mysql://10.66.137.124:3306/points_mall?user=dw_read&password=G42IMZ1tbsZ@4OZq"
-url_dw = "jdbc:mysql://10.66.147.66:3306/dw?user=bi&password=JwAkQEik9yW$hxJU"
+url_ol = "jdbc:mysql://xxx:3306/xxx?user=xxx&password=xxx"
+url_dw = "jdbc:mysql://xxx:3306/xxx?user=xxx&password=xxx"
 
 
 def streaming_run():
     spark = SparkSession \
         .builder \
         .appName("STRUCTURED_STREAMING_TONGDUIBA_BEHAVIOUR_LOG") \
-        .config("spark.sql.shuffle.partitions", "2") \
+        .config("spark.sql.shuffle.partitions", "20") \
         .getOrCreate()
 
     spark.sparkContext.setLogLevel("ERROR")
@@ -84,7 +84,7 @@ def streaming_run():
 
     query = df1 \
         .writeStream \
-        .option("checkpointLocation", "/home/quanruijia/dw_shell/py/spark/checkpoint/") \
+        .option("checkpointLocation", "/home/xxx/dw_shell/py/spark/checkpoint/") \
         .foreachBatch(process_batch) \
         .start()
 
