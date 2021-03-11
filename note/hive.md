@@ -6,6 +6,12 @@ CREATE TABLE XXX (...) PARTITIONED BY (ETL_DATE STRING);
 -- 二级分区
 CREATE TABLE XXX (...) PARTITIONED BY (ETL_DATE STRING, DATE_HOUR STRING);
 
+-- 新增分区
+ALTER TABLE XXX ADD PARTITION(ETL_DATE='20210311');
+
+-- 删除分区
+ALTER TABLE XXX DROP PARTITION(ETL_DATE='20210311');
+
 -- 动态分区
 SET hive.exec.dynamic.partition=true; -- 默认为true
 SET hive.exec.dynamic.partition.mode=nonstrict; --默认为strict，hive3版本以上可以忽略`PARTITION`关键字来跳过严格模式
