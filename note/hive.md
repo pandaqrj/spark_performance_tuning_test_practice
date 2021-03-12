@@ -104,9 +104,10 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
     + ### 3. 分桶 Sort Merge Buket Join
         需要再`MAPJOIN`条件下才能进行SMB JOIN，不过MAPJOIN已经默认开启。不用再指定了
         ```sql
-        SET hive.auto.convert.join=true; -- 默认true
-        SET hive.optimize.bucketmapjoin=true;
-        SET hive.optimize.bucketmapjoin.sortedmerge=true;
+        set hive.auto.convert.sortmerge.join=true;
+        set hive.optimize.bucketmapjoin = true;
+        set hive.optimize.bucketmapjoin.sortedmerge = true;
+        set hive.auto.convert.sortmerge.join.noconditionaltask=true;
         ```
         
         然后建立分桶表
@@ -228,7 +229,7 @@ SELECT * FROM XXX TABLESAMPLE(BUCKET 1 OUT OF 4 ON ID);
             + 修改hive配置
                 ```sql
                 -- 每个reduce处理数据的大小，默认256MB
-                SET hive.reducers.bytes.per.reducer=256000000;
+                SET hive.exec.reducers.bytes.per.reducer=256000000;
                 
                 --每个任务最大reduce数，默认1009
                 SET hive.exec.reducers.max=1009;
